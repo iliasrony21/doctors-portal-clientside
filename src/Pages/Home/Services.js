@@ -42,7 +42,7 @@ const Services = () => {
           <Service key={service._id} service={service}></Service>
         ))}
       </div>
-      <div className='hero min-h-screen'>
+      <div className='hero min-h-screen mb-40'>
         <div className='hero-content flex-col lg:flex-row'>
           <img src={treatment} className='max-w-sm rounded-lg shadow-2xl' />
           <div className='px-20'>
