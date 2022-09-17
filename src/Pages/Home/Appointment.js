@@ -1,5 +1,5 @@
 import React from 'react'
-import doctor from '../../assets/images/doctor.png'
+import doctorsmall from '../../assets/images/doctor-small.png'
 import appointment from '../../assets/images/appointment.png'
 
 const Appointment = () => {
@@ -11,7 +11,7 @@ const Appointment = () => {
       }}
     >
       <div className='flex-1 hidden lg:block'>
-        <img className='mt-[-160px]' src={doctor} alt='' />
+        <img className='mt-[-120px]' src={doctorsmall} alt='' />
       </div>
       <div className='flex-1 '>
         <h1 className='text-xl text-primary mb-3'>Appointment</h1>
