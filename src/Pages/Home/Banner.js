@@ -11,7 +11,11 @@ const Banner = () => {
       }}
     >
       <div className='hero-content flex-col lg:flex-row-reverse  '>
-        <img src={banner} className='max-w-lg rounded-lg shadow-2xl ml-0' />
+        <img
+          src={banner}
+          className='max-w-lg rounded-lg shadow-2xl ml-0'
+          alt='banner'
+        />
         <div>
           <h1 className='text-5xl font-bold'>
             Your new smile starts <br />

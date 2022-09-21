@@ -4,10 +4,10 @@ const InfoCard = ({ img, cardTitle, bgClass }) => {
   return (
     <div>
       <div
-        className={`card lg:card-side ml-4 mr-4 shadow-xl bg-primary ${bgClass}`}
+        className={`card lg:card-side ml-4 mb-5 mr-4 shadow-xl bg-primary ${bgClass}`}
       >
         <figure>
-          <img className='ml-5' src={img} alt='Album' />
+          <img className='ml-5 pt-5' src={img} alt='Album' />
         </figure>
         <div className='card-body '>
           <h2 className='card-title text-white'>{cardTitle}</h2>

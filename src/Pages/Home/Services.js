@@ -44,7 +44,11 @@ const Services = () => {
       </div>
       <div className='hero min-h-screen mb-40'>
         <div className='hero-content flex-col lg:flex-row'>
-          <img src={treatment} className='max-w-sm rounded-lg shadow-2xl' />
+          <img
+            src={treatment}
+            className='max-w-sm rounded-lg shadow-2xl'
+            alt='treatment'
+          />
           <div className='px-20'>
             <h1 className='text-5xl font-bold'>
               Exceptional Dental <br /> Care, on Your Terms

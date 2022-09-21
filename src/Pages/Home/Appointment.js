@@ -5,7 +5,7 @@ import appointment from '../../assets/images/appointment.png'
 const Appointment = () => {
   return (
     <section
-      className='flex justify-center items-center mb-20'
+      className='flex justify-center items-center mb-20 mx-5 px-5'
       style={{
         background: `url(${appointment})`
       }}
@@ -14,7 +14,7 @@ const Appointment = () => {
         <img className='mt-[-120px]' src={doctorsmall} alt='' />
       </div>
       <div className='flex-1 '>
-        <h1 className='text-xl text-primary mb-3'>Appointment</h1>
+        <h1 className='text-xl text-primary mb-3 font-bold'>Appointment</h1>
         <h1 className='text-3xl text-white'>Make an appointment Today</h1>
         <p className='text-white my-6'>
           It is a long established fact that a reader will be distracted by the
