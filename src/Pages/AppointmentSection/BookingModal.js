@@ -1,13 +1,14 @@
 import React from 'react'
 import { format } from 'date-fns'
 
-const BookingModal = ({ date, treatments }) => {
+const BookingModal = ({ date, treatments, setTreatments }) => {
   const { _id, name, slots } = treatments
 
   const handleAppointment = event => {
     event.preventDefault()
     const slot = event.target.slot.value
     console.log(_id, name, slot)
+    setTreatments(null)
   }
   return (
     <div>

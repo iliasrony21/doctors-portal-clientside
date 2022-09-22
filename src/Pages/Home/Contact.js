@@ -16,21 +16,21 @@ const Contact = () => {
         <h1 className='text-4xl text-white text-center mb-10'>
           Stay connected with us
         </h1>
-        <div className='  grid grid-rows-3 justify-center'>
+        <div className='  grid grid-cols-1 justify-items-center gap-5'>
           <input
             type='text'
             placeholder='Email Address'
-            className='input w-96 '
+            className='input input-bordered w-full max-w-lg  '
           />
 
           <input
             type='text'
             placeholder='Subject'
-            className='input w-full w-96 mt-[-18px] '
+            className='input input-bordered w-full max-w-lg  '
           />
 
           <textarea
-            className='textarea h-32 mt-[-38px]  mb-2'
+            className='textarea w-full max-w-lg h-56'
             placeholder='Your message'
           ></textarea>
         </div>
