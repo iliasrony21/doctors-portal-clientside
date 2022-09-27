@@ -34,6 +34,7 @@ const Footer = () => {
       </div>
       <div className='text-center mb-12'>
         <p>Copyright © 2022 - All right reserved </p>
+        <p>MD.Ilias Ahomed (Rony)</p>
       </div>
     </div>
   )

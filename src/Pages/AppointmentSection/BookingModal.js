@@ -1,14 +1,46 @@
 import React from 'react'
 import { format } from 'date-fns'
+import auth from '../../firebase.init'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { toast } from 'react-toastify'
 
-const BookingModal = ({ date, treatments, setTreatments }) => {
+const BookingModal = ({ date, treatments, setTreatments, refetch }) => {
   const { _id, name, slots } = treatments
+  const [user, loading, error] = useAuthState(auth)
+
+  const formattedDate = format(date, 'PP')
 
   const handleAppointment = event => {
     event.preventDefault()
     const slot = event.target.slot.value
-    console.log(_id, name, slot)
-    setTreatments(null)
+    const booking = {
+      treatmentId: _id,
+      treatment: name,
+      date: formattedDate,
+      slot,
+      patientEmail: user.email,
+      patient: user.displayName,
+      phone: event.target.phone.value
+    }
+    fetch('http://localhost:5000/booking', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(booking)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          toast(`Appointment successfully on ${formattedDate} at ${slot}`)
+        } else {
+          toast.error(
+            `You already have an Appointment on ${data.booking?.date} at ${data.booking?.slot}`
+          )
+        }
+        refetch()
+        setTreatments(null)
+      })
   }
   return (
     <div>
@@ -36,14 +68,24 @@ const BookingModal = ({ date, treatments, setTreatments }) => {
               name='slot'
               className='select select-bordered w-full max-w-lg '
             >
-              {slots.map(slot => (
-                <option value={slot}>{slot}</option>
+              {slots.map((slot, index) => (
+                <option key={index} value={slot}>
+                  {slot}
+                </option>
               ))}
             </select>
             <input
               type='text'
               name='name'
-              placeholder='Full name'
+              disabled
+              value={user?.displayName || ''}
+              className='input input-bordered w-full max-w-lg'
+            />
+            <input
+              type='email'
+              name='email'
+              disabled
+              value={user?.email || ''}
               className='input input-bordered w-full max-w-lg'
             />
             <input
@@ -52,12 +94,7 @@ const BookingModal = ({ date, treatments, setTreatments }) => {
               placeholder='Phone number'
               className='input input-bordered w-full max-w-lg'
             />
-            <input
-              type='email'
-              name='email'
-              placeholder='Email'
-              className='input input-bordered w-full max-w-lg'
-            />
+
             <input
               type='submit'
               value='Submit'

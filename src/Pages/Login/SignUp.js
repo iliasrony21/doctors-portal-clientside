@@ -1,56 +1,83 @@
 import React from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
-  useSignInWithEmailAndPassword,
-  useSignInWithGoogle
+  useCreateUserWithEmailAndPassword,
+  useSignInWithGoogle,
+  useUpdateProfile
 } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init'
 import { useForm } from 'react-hook-form'
 import Loading from '../../Shared/Loading'
+import useToken from '../../Hooks/useToken'
 
-const Login = () => {
+const SignUp = () => {
   const [signInWithGoogle, guser, gLoading, gError] = useSignInWithGoogle(auth)
-  let navigate = useNavigate()
-  let location = useLocation()
-  let from = location.state?.from?.pathname || '/'
+  const [updateProfile, updating, updateError] = useUpdateProfile(auth)
+
   const [
-    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
     user,
     loading,
     error
-  ] = useSignInWithEmailAndPassword(auth)
+  ] = useCreateUserWithEmailAndPassword(auth)
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm()
-  const onSubmit = data => {
+  const [token] = useToken(user || guser)
+
+  const onSubmit = async data => {
     console.log(data)
-    signInWithEmailAndPassword(data.email, data.password)
+    await createUserWithEmailAndPassword(data.email, data.password)
+    await updateProfile({ displayName: data.name })
+    console.log('update done')
+    // navigate('/login')
   }
+  const navigate = useNavigate()
   let signInError
-  if (error || gError) {
+  if (error || gError || updateError) {
     signInError = (
-      <p className='text-red-500'>Error: {error?.message || gError?.message}</p>
-    )
-  }
-  if (loading || gLoading) {
-    return (
-      <p className=''>
-        <Loading></Loading>
+      <p className='text-red-500'>
+        Error: {error?.message || gError?.message || updateError?.message}
       </p>
     )
   }
-  if (user || guser) {
-    navigate(from, { replace: true })
+  if (loading || gLoading) {
+    return <Loading></Loading>
+  }
+  if (token) {
+    // console.log('hello', user)
+    navigate('/appointment')
   }
   return (
     <div className='flex justify-center items-center h-screen  '>
       <div className='card w-96 bg-base-100 shadow-2xl'>
         <div className='card-body'>
-          <h2 className='text-3xl font-bold text-center'>Log In!</h2>
+          <h2 className='text-3xl font-bold text-center'>Sign Up!</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='form-control w-full max-w-lg'>
+              <label className='label'>
+                <span className='label-text'>Name</span>
+              </label>
+              <input
+                type='text'
+                placeholder='Your Name'
+                className='input input-bordered w-full max-w-xs'
+                {...register('name', {
+                  required: {
+                    value: true,
+                    message: 'Name is required'
+                  }
+                })}
+              />
+              <label className='label'>
+                {errors.name?.type === 'required' && (
+                  <span className='label-text-alt text-red-700'>
+                    {errors.name.message}
+                  </span>
+                )}
+              </label>
               <label className='label'>
                 <span className='label-text'>Email</span>
               </label>
@@ -115,15 +142,15 @@ const Login = () => {
 
             <input
               type='submit'
-              value='Log In'
+              value='Sign Up'
               className='btn btn-accent w-full max-w-xs'
             />
             {signInError}
             <p>
-              New to Doctor sheba?{' '}
-              <Link to='/signup' className='text-secondary'>
+              Already have an Account?{' '}
+              <Link to='/login' className='text-secondary'>
                 {' '}
-                Creat an Account
+                Log In
               </Link>
             </p>
           </form>
@@ -140,4 +167,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default SignUp

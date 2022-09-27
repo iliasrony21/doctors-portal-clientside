@@ -7,7 +7,8 @@ const Banner = () => {
     <div
       className='hero min-h-screen '
       style={{
-        background: `url(${bg})`
+        background: `url(${bg})`,
+        backgroundSize: 'cover'
       }}
     >
       <div className='hero-content flex-col lg:flex-row-reverse  '>
