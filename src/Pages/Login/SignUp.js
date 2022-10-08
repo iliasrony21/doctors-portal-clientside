@@ -9,11 +9,12 @@ import auth from '../../firebase.init'
 import { useForm } from 'react-hook-form'
 import Loading from '../../Shared/Loading'
 import useToken from '../../Hooks/useToken'
+// import useToken from '../../Hooks/useToken'
 
 const SignUp = () => {
   const [signInWithGoogle, guser, gLoading, gError] = useSignInWithGoogle(auth)
   const [updateProfile, updating, updateError] = useUpdateProfile(auth)
-
+  const navigate = useNavigate()
   const [
     createUserWithEmailAndPassword,
     user,
@@ -27,14 +28,6 @@ const SignUp = () => {
   } = useForm()
   const [token] = useToken(user || guser)
 
-  const onSubmit = async data => {
-    console.log(data)
-    await createUserWithEmailAndPassword(data.email, data.password)
-    await updateProfile({ displayName: data.name })
-    console.log('update done')
-    // navigate('/login')
-  }
-  const navigate = useNavigate()
   let signInError
   if (error || gError || updateError) {
     signInError = (
@@ -47,8 +40,14 @@ const SignUp = () => {
     return <Loading></Loading>
   }
   if (token) {
-    // console.log('hello', user)
+    // console.log('signup user', user || guser)
     navigate('/appointment')
+  }
+  const onSubmit = async data => {
+    console.log(data)
+    await createUserWithEmailAndPassword(data.email, data.password)
+    await updateProfile({ displayName: data.name })
+    console.log('signup update done')
   }
   return (
     <div className='flex justify-center items-center h-screen  '>

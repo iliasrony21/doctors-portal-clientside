@@ -7,27 +7,36 @@ import {
 import auth from '../../firebase.init'
 import { useForm } from 'react-hook-form'
 import Loading from '../../Shared/Loading'
+import { useEffect } from 'react'
+import useToken from '../../Hooks/useToken'
 
 const Login = () => {
   const [signInWithGoogle, guser, gLoading, gError] = useSignInWithGoogle(auth)
   let navigate = useNavigate()
   let location = useLocation()
   let from = location.state?.from?.pathname || '/'
+
   const [
     signInWithEmailAndPassword,
     user,
     loading,
     error
   ] = useSignInWithEmailAndPassword(auth)
+
+  const [token] = useToken(user || guser)
+
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm()
-  const onSubmit = data => {
-    console.log(data)
-    signInWithEmailAndPassword(data.email, data.password)
-  }
+
+  useEffect(() => {
+    if (token) {
+      navigate(from, { replace: true })
+    }
+  }, [token, from, navigate])
+
   let signInError
   if (error || gError) {
     signInError = (
@@ -35,14 +44,11 @@ const Login = () => {
     )
   }
   if (loading || gLoading) {
-    return (
-      <p className=''>
-        <Loading></Loading>
-      </p>
-    )
+    return <Loading></Loading>
   }
-  if (user || guser) {
-    navigate(from, { replace: true })
+  const onSubmit = data => {
+    console.log('login data', data)
+    signInWithEmailAndPassword(data.email, data.password)
   }
   return (
     <div className='flex justify-center items-center h-screen  '>
@@ -123,7 +129,7 @@ const Login = () => {
               New to Doctor sheba?{' '}
               <Link to='/signup' className='text-secondary'>
                 {' '}
-                Creat an Account
+                Create an Account
               </Link>
             </p>
           </form>
